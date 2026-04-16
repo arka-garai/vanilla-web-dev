@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+</head>
+
+<body>
+    <input type="text" placeholder="Enter todo" name="" value="">
+    <button onclick="addTodo()">Add todo!</button>
+    <div id="parent-todo">
+
+    </div>
+    <script>
+        //state variables
+        let todos = [];
+        let todoCount = 1;
+
+        function addTodo() {
+            todos.push({
+                title: document.querySelector("input").value,
+                id: todoCount++
+            })
+            document.querySelector("input").value = "";
+            render();
+        }
+
+        function deleteTodo(todoId) {
+
+            todos = todos.filter(todo => todo.id != todoId)
+            render();
+        }
+
+        //component
+        function createTodoComponent(todo) {
+            const todoDiv = document.createElement("div");
+            const spanTodo = document.createElement("span");
+            const delButton = document.createElement("button");
+
+            spanTodo.innerHTML = todo.title;
+            delButton.innerHTML = "delete";
+            delButton.setAttribute("onclick", `deleteTodo(${todo.id})`);
+            todoDiv.appendChild(spanTodo);
+            todoDiv.appendChild(delButton);
+
+            return todoDiv;
+        }
+
+
+        //like react responsible for reconciliation
+        function render() {
+            document.querySelector("#parent-todo").innerHTML = "";
+            for (let i = 0; i < todos.length; i++) {
+                const div = createTodoComponent(todos[i]);
+                document.querySelector("#parent-todo").appendChild(div);
+            }
+        }
+    </script>
+</body>
+
+</html>
